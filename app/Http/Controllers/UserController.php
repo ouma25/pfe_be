@@ -1,0 +1,133 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Client;
+use App\Models\Professional;
+use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+
+class UserController extends Controller
+{
+    public function add_user(Request $request)
+    {
+        $request->validate([
+            'first_name' => ['string', 'required'],
+            'last_name' => ['string', 'required'],
+            'city' => ['string', 'required'],
+            'email' => ['email', 'required'],
+            'phone' => ['string', 'required'],
+            'password' => ['string', 'required', 'min:8', 'max:32'],
+            'type' => ['string', 'required']
+        ]);
+
+        switch($request->type)
+        {
+            case 'client': {
+
+                $user = new User();
+                $user->first_name = $request->first_name;
+                $user->last_name = $request->last_name;
+                $user->city = $request->city;
+                $user->email = $request->email;
+                $user->phone = $request->phone;
+                $user->password = Hash::make($request->password);
+                $user->type = 'client';
+
+                break;
+            }
+
+            case 'professional': {
+
+                $request->validate([
+                    'birthdate' => ['date', 'required'],
+                    'job_title' => ['string', 'required'],
+                    'image' => ['required', 'url'],
+                    'image_cin' => ['required', 'url'],
+                ]);
+
+                $user = new User();
+                $user->first_name = $request->first_name;
+                $user->last_name = $request->last_name;
+                $user->city = $request->city;
+                $user->email = $request->email;
+                $user->phone = $request->phone;
+                $user->image = $request->image;
+                $user->image_cin = $request->image_cin;
+                $user->birthdate = $request->birthdate;
+                $user->job_title = $request->job_title;
+                $user->image = $request->image;
+                $user->password = Hash::make($request->password);
+                $user->type = 'professional';
+
+                break;
+            }
+
+            default:
+                break;
+        }
+
+        return $user->save();
+    }
+
+    public function update_user(Request $request)
+    {
+        $request->validate([
+            'id' => ['numeric', 'required'],
+            'first_name' => ['string', 'required'],
+            'last_name' => ['string', 'required'],
+            'city' => ['string', 'required'],
+            'email' => ['email', 'required'],
+            'phone' => ['string', 'required'],
+            'type' => ['string', 'required']
+        ]);
+
+        $user = User::all()->find($request->id);
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
+        $user->city = $request->city;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->type = $request->type;
+
+        return $user->save();
+    }
+
+    public function delete_user(Request $request)
+    {
+        $request->validate([
+            'id' => 'required'
+        ]);
+
+        $user = User::all()->find($request->id);
+        $user->deleted = 1;
+        $user->deleted_at = date('Y-m-d h:m:s');
+
+        return $user->save();
+    }
+
+    public function get_list()
+    {
+        return User::all()->where('deleted', '=', 0);
+    }
+
+    public function search(Request $request)
+    {
+        $request->validate([
+            'id' => ['numeric', 'required']
+        ]);
+
+        return User::all()->find($request->id);
+    }
+
+    // Admin functions
+    public function validate_user(Request $request)
+    {
+        $request->validate([
+            'id' => ['numeric', 'required']
+        ]);
+
+        return User::all()->find($request->id);
+    }
+}
