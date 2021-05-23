@@ -4,13 +4,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\UserController;
 use \App\Http\Controllers\ServiceController;
-use \App\Http\Controllers\ProfessionalController;
 use \App\Http\Controllers\NotificationController;
 use \App\Http\Controllers\JobController;
 use \App\Http\Controllers\ExperienceController;
 use \App\Http\Controllers\EvaluationController;
 use \App\Http\Controllers\Contact_requestController;
-use \App\Http\Controllers\ClientController;
 use \App\Http\Controllers\AuthController;
 
 /*
@@ -34,7 +32,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/user/list', [UserController::class, 'get_list']);
     Route::get('/user/search/{id}', [UserController::class, 'search']);
 
-    Route::post('/user/add', [UserController::class, 'add_user']);
     Route::patch('/user/update', [UserController::class, 'update_user']);
     Route::delete('/user/delete', [UserController::class, 'delete_user']);
 
@@ -42,24 +39,29 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::patch('/service/update', [ServiceController::class, 'update_service']);
     Route::delete('/service/delete', [ServiceController::class, 'delete_service']);
 
-    Route::patch('/client/update', [ClientController::class, 'update_client']);
-    Route::delete('/client/delete', [ClientController::class, 'delete_client']);
-
 });
 
+// Register a user
 Route::post('/user/register', [UserController::class, 'add_user']);
+
+// Login
+Route::post('/user/login', [AuthController::class, 'authenticate']);
+
+// Logout
+Route::post('/user/logout', [AuthController::class, 'logout']);
+
+// Professionals
+Route::get('/user/professional/list', [UserController::class, 'get_professionals']);
+
+// User details
+Route::get('/user/details/{id}', [UserController::class, 'get_details']);
+
+// Clients
+Route::get('/user/clients/list', [UserController::class, 'get_clients']);
 
 // Service
 Route::get('/service/list', [ServiceController::class, 'get_list']);
 Route::get('/service/search/{id}', [ServiceController::class, 'search']);
-
-// Professional
-Route::get('/professional/list', [ProfessionalController::class, 'add_professional']);
-Route::get('/professional/search/{id}', [ProfessionalController::class, 'search']);
-
-Route::post('/professional/add', [ProfessionalController::class, 'add_professional']);
-Route::patch('/professional/update', [ProfessionalController::class, 'update_professional']);
-Route::delete('/professional/delete', [ProfessionalController::class, 'delete_professional']);
 
 // Notification
 Route::get('/notification/list', [NotificationController::class, 'get_list']);
@@ -101,22 +103,6 @@ Route::post('/contact_request/add', [Contact_requestController::class, 'add_cont
 Route::patch('/contact_request/update', [Contact_requestController::class, 'update_contact_request']);
 Route::delete('/contact_request/delete', [Contact_requestController::class, 'delete_contact_request']);
 
-// Client
-Route::get('/client/list', [ClientController::class, 'get_list']);
-Route::get('/client/search/{id}', [ClientController::class, 'search']);
-
-// Login
-Route::post('/login', [AuthController::class, 'authenticate']);
-
-// Generate password Hash
-Route::get('/password/{password}', function(Request $request){
-    return \Illuminate\Support\Facades\Hash::make($request->password);
-});
-
 // Admin actions
-
 Route::group(['middleware' => ['checkAdmin']], function () {
-
-
-
 });

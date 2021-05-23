@@ -22,7 +22,7 @@ class UserController extends Controller
             'type' => ['string', 'required']
         ]);
 
-        switch($request->type)
+        switch(strtolower($request->type))
         {
             case 'client': {
 
@@ -34,6 +34,7 @@ class UserController extends Controller
                 $user->phone = $request->phone;
                 $user->password = Hash::make($request->password);
                 $user->type = 'client';
+                $user->birthdate = null;
 
                 break;
             }
@@ -129,5 +130,20 @@ class UserController extends Controller
         ]);
 
         return User::all()->find($request->id);
+    }
+
+    public function get_professionals()
+    {
+        return User::all()->where('deleted', '=', 0)->where('active', '=', 1)->where('type', '=', 'professional');
+    }
+
+    public function get_clients()
+    {
+        return User::all()->where('deleted', '=', 0)->where('active', '=', 1)->where('type', '=', 'client');
+    }
+
+    public function get_details(Request $request)
+    {
+        return User::all()->where('id', '=', $request->id)->first();
     }
 }

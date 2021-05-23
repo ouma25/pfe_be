@@ -18,15 +18,23 @@ class AuthController extends Controller
     {
         $credentials = $request->only('email', 'password');
 
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($credentials))
+        {
             $request->session()->regenerate();
 
-            // Store the connected user data to the session
-            session()->put(User::where('email', '=', $request->email)->first());
+            $active_user = User::where('email', '=', $request->email)->first();
 
-            return response(json_encode(['message', 'success']));
+            // Store the connected user data to the session
+            session()->put(json_encode($active_user));
+
+            return response($active_user->createToken($request->email)->plainTextToken);
         }
 
-        return response(json_encode(['message', 'error']));
+        return response(403, 403);
+    }
+
+    public function logout()
+    {
+        return Auth::logout();
     }
 }

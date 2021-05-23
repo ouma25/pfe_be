@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Experience extends Model
 {
     use HasFactory;
+
+    public function Experience()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
