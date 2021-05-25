@@ -34,7 +34,6 @@ class UserController extends Controller
                 $user->phone = $request->phone;
                 $user->password = Hash::make($request->password);
                 $user->type = 'client';
-                $user->birthdate = null;
 
                 break;
             }
@@ -145,5 +144,14 @@ class UserController extends Controller
     public function get_details(Request $request)
     {
         return User::all()->where('id', '=', $request->id)->first();
+    }
+
+    public function upload_image(Request $request)
+    {
+        $file_name = date('Y-m-d-h-m-s').".".$request->image->extension();
+
+        $request->image->storeAs('public/images', $file_name);
+
+        return $file_name;
     }
 }

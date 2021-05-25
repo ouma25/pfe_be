@@ -51,13 +51,16 @@ Route::post('/user/login', [AuthController::class, 'authenticate']);
 Route::post('/user/logout', [AuthController::class, 'logout']);
 
 // Professionals
-Route::get('/user/professional/list', [UserController::class, 'get_professionals']);
+Route::get('/user/professionals/list', [UserController::class, 'get_professionals']);
 
 // User details
 Route::get('/user/details/{id}', [UserController::class, 'get_details']);
 
 // Clients
 Route::get('/user/clients/list', [UserController::class, 'get_clients']);
+
+// Upload image
+Route::post('/upload/image', [UserController::class, 'upload_image']);
 
 // Service
 Route::get('/service/list', [ServiceController::class, 'get_list']);
