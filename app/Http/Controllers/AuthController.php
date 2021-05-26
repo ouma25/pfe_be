@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
@@ -16,21 +18,21 @@ class AuthController extends Controller
      */
     public function authenticate(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required', 'min:8', 'max:32'],
+            'device_name' => ['required']
+        ]);
 
-        if (Auth::attempt($credentials))
-        {
-            $request->session()->regenerate();
+        $user = User::where('email', $request->email)->first();
 
-            $active_user = User::where('email', '=', $request->email)->first();
-
-            // Store the connected user data to the session
-            session()->put(json_encode($active_user));
-
-            return response($active_user->createToken($request->email)->plainTextToken);
+        if (! $user || ! Hash::check($request->password, $user->password)) {
+            throw ValidationException::withMessages([
+                'email' => ['The provided credentials are incorrect.'],
+            ]);
         }
 
-        return response(403, 403);
+        return $user->createToken($request->device_name)->plainTextToken;
     }
 
     public function logout()
