@@ -47,6 +47,9 @@ Route::post('/user/register', [UserController::class, 'add_user']);
 // Login
 Route::post('/user/login', [AuthController::class, 'authenticate']);
 
+// Forgot password
+Route::post('/user/forgot_password', [UserController::class, 'forgot_password']);
+
 // Logout
 Route::post('/user/logout', [AuthController::class, 'logout']);
 

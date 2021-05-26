@@ -15,5 +15,6 @@ class VerifyCsrfToken extends Middleware
         '/api/upload/image',
         '/api/user/register',
         '/api/user/login',
+        '/api/user/forgot_password'
     ];
 }

@@ -7,6 +7,7 @@ use App\Models\Professional;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
@@ -153,5 +154,30 @@ class UserController extends Controller
         $request->image->storeAs('public/images', $file_name);
 
         return $file_name;
+    }
+
+    public function forgot_password(Request $request)
+    {
+        $request->validate([
+            'email' => ['required', 'email']
+        ]);
+
+        $user = User::all()->where('email', '=', $request->email)->first();
+
+        if($user)
+        {
+            $user->password = '$2y$10$6BzZUJBOgzQdbSk40eM5D./MLrgSm7mLcpmVuoph5Rv.YxnBnT2/G'; // 123456789
+            $user->save();
+
+            // Send confirmation email to the user
+        }
+        else
+        {
+            throw ValidationException::withMessages([
+                'email' => ['The email is not found!'],
+            ]);
+        }
+
+        return response(['message' => 'success']);
     }
 }
