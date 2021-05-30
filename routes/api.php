@@ -10,6 +10,7 @@ use \App\Http\Controllers\ExperienceController;
 use \App\Http\Controllers\EvaluationController;
 use \App\Http\Controllers\Contact_requestController;
 use \App\Http\Controllers\AuthController;
+use \App\Http\Controllers\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -108,6 +109,11 @@ Route::get('/contact_request/search/{id}', [Contact_requestController::class, 's
 Route::post('/contact_request/add', [Contact_requestController::class, 'add_contact_request']);
 Route::patch('/contact_request/update', [Contact_requestController::class, 'update_contact_request']);
 Route::delete('/contact_request/delete', [Contact_requestController::class, 'delete_contact_request']);
+
+// Contact
+Route::get('/comments/list', [CommentController::class, 'list']);
+Route::post('/comments/add', [CommentController::class, 'add']);
+Route::post('/comments/delete', [CommentController::class, 'delete']);
 
 // Admin actions
 Route::group(['middleware' => ['checkAdmin']], function () {
