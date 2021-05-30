@@ -11,6 +11,7 @@ use \App\Http\Controllers\EvaluationController;
 use \App\Http\Controllers\Contact_requestController;
 use \App\Http\Controllers\AuthController;
 use \App\Http\Controllers\CommentController;
+use \App\Http\Controllers\ConversationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -114,6 +115,11 @@ Route::delete('/contact_request/delete', [Contact_requestController::class, 'del
 Route::get('/comments/list', [CommentController::class, 'list']);
 Route::post('/comments/add', [CommentController::class, 'add']);
 Route::post('/comments/delete', [CommentController::class, 'delete']);
+
+// Conversation
+Route::post('/user/conversation/list', [ConversationController::class, 'list']);
+Route::post('/user/conversation/add', [ConversationController::class, 'add']);
+Route::post('/user/conversation/delete', [ConversationController::class, 'delete']);
 
 // Admin actions
 Route::group(['middleware' => ['checkAdmin']], function () {
