@@ -14,8 +14,10 @@ class ConversationController extends Controller
             'receiver' => ['required', 'numeric']
         ]);
 
-        return Conversation::all()->where('sender', '=', $request->sender)
-                                  ->where('receiver', '=', $request->receiver);
+        return Conversation::where('sender', '=', $request->sender)
+                                  ->where('receiver', '=', $request->receiver)
+                                  ->orWhere('sender', '=', $request->receiver)
+                                  ->orWhere('receiver', '=', $request->sender)->get();
     }
 
     public function add(Request $request)
@@ -23,7 +25,7 @@ class ConversationController extends Controller
         $request->validate([
             'sender' => ['required', 'numeric'],
             'receiver' => ['required', 'numeric'],
-            'message' => ['required', 'content']
+            'message' => ['required', 'string']
         ]);
 
         return Conversation::create([

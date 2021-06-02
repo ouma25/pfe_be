@@ -4,12 +4,19 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Comment;
+use Illuminate\Support\Facades\DB;
 
 class CommentController extends Controller
 {
-    public function list()
+    public function list(Request $request)
     {
-        return Comment::all()->where('deleted', '=', 0);
+        $request->validate([
+            'professional' => ['required', 'numeric']
+        ]);
+
+        return DB::select("SELECT c.id, c.text, u.first_name, u.last_name FROM comments c JOIN users u ON u.id = c.user WHERE c.professional = :professional", ['professional' => $request->professional]);
+
+        //return Comment::all()->where('professional', '=', $request->professional)->where('deleted', '=', 0);
     }
 
     public function add(Requet $requet)

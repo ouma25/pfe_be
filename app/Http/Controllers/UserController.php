@@ -180,4 +180,13 @@ class UserController extends Controller
 
         return response(['message' => 'success']);
     }
+
+    public function get_details_email(Request $request)
+    {
+        $request->validate([
+            'email' => ['required', 'email']
+        ]);
+
+        return User::all()->where('email', '=', $request->email)->first();
+    }
 }

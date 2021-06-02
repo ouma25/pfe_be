@@ -61,6 +61,9 @@ Route::get('/user/professionals/list', [UserController::class, 'get_professional
 // User details
 Route::get('/user/details/{id}', [UserController::class, 'get_details']);
 
+// User details email
+Route::get('/user/details', [UserController::class, 'get_details_email']);
+
 // Clients
 Route::get('/user/clients/list', [UserController::class, 'get_clients']);
 
@@ -112,7 +115,7 @@ Route::patch('/contact_request/update', [Contact_requestController::class, 'upda
 Route::delete('/contact_request/delete', [Contact_requestController::class, 'delete_contact_request']);
 
 // Contact
-Route::get('/comments/list', [CommentController::class, 'list']);
+Route::post('/comments/list', [CommentController::class, 'list']);
 Route::post('/comments/add', [CommentController::class, 'add']);
 Route::post('/comments/delete', [CommentController::class, 'delete']);
 
