@@ -31,7 +31,7 @@ class ConversationController extends Controller
         return Conversation::create([
             'sender' => $request->sender,
             'receiver' => $request->receiver,
-            'content' => $request->message
+            'message' => $request->message
         ]);
     }
 

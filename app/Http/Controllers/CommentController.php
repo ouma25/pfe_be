@@ -14,16 +14,16 @@ class CommentController extends Controller
             'professional' => ['required', 'numeric']
         ]);
 
-        return DB::select("SELECT c.id, c.text, u.first_name, u.last_name FROM comments c JOIN users u ON u.id = c.user WHERE c.professional = :professional", ['professional' => $request->professional]);
+        return DB::select("SELECT c.id, c.text, concat(u.first_name, ' ', u.last_name) as full_name, c.created_at FROM comments c JOIN users u ON u.id = c.user WHERE c.professional = :professional", ['professional' => $request->professional]);
 
         //return Comment::all()->where('professional', '=', $request->professional)->where('deleted', '=', 0);
     }
 
-    public function add(Requet $requet)
+    public function add(Request $requet)
     {
         $requet->validate([
             'user' => ['required', 'numeric'],
-            'text' => ['required', 'text'],
+            'text' => ['required', 'string'],
             'professional' => ['required', 'numeric']
         ]);
 

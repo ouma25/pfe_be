@@ -37,11 +37,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::patch('/user/update', [UserController::class, 'update_user']);
     Route::delete('/user/delete', [UserController::class, 'delete_user']);
 
-    Route::post('/service/add', [ServiceController::class, 'add_service']);
-    Route::patch('/service/update', [ServiceController::class, 'update_service']);
-    Route::delete('/service/delete', [ServiceController::class, 'delete_service']);
+    Route::post('/services/add', [ServiceController::class, 'add_service']);
+    Route::patch('/services/update', [ServiceController::class, 'update_service']);
+    Route::delete('/services/delete', [ServiceController::class, 'delete_service']);
 
 });
+
+Route::get('/services/list', [ServiceController::class, 'get_list']);
 
 // Register a user
 Route::post('/user/register', [UserController::class, 'add_user']);
