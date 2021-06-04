@@ -46,6 +46,7 @@ class UserController extends Controller
                     'job_title' => ['string', 'required'],
                     'image' => ['required', 'url'],
                     'image_cin' => ['required', 'url'],
+                    'service' => ['required', 'numeric']
                 ]);
 
                 $user = new User();
@@ -61,6 +62,7 @@ class UserController extends Controller
                 $user->image = $request->image;
                 $user->password = Hash::make($request->password);
                 $user->type = 'professional';
+                $user->service = $request->service;
 
                 break;
             }
