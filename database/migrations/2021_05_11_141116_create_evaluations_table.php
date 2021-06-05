@@ -15,9 +15,9 @@ class CreateEvaluationsTable extends Migration
     {
         Schema::create('evaluations', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('user');
+            $table->integer('professional');
             $table->integer('stars_number');
-            $table->text('comment');
-            $table->integer('flags_number');
             $table->integer('deleted')->default(0);
             $table->timestamps();
         });

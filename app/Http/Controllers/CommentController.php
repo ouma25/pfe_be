@@ -14,7 +14,7 @@ class CommentController extends Controller
             'professional' => ['required', 'numeric']
         ]);
 
-        return DB::select("SELECT c.id, c.text, concat(u.first_name, ' ', u.last_name) as full_name, c.created_at FROM comments c JOIN users u ON u.id = c.user WHERE c.professional = :professional", ['professional' => $request->professional]);
+        return DB::select("SELECT c.id as comment_id, c.text, u.image, c.user as commenter, u.id as user_id, concat(u.first_name, ' ', u.last_name) as full_name, c.created_at FROM comments c JOIN users u ON u.id = c.user WHERE c.professional = :professional", ['professional' => $request->professional]);
 
         //return Comment::all()->where('professional', '=', $request->professional)->where('deleted', '=', 0);
     }
@@ -40,8 +40,6 @@ class CommentController extends Controller
             'id' => ['required', 'numeric']
         ]);
 
-        $comment = Comment::find($request->id);
-        $comment->deleted = 1;
-        return $comment->save();
+        return Comment::where('id', '=', $request->id)->delete();
     }
 }

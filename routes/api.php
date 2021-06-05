@@ -12,6 +12,7 @@ use \App\Http\Controllers\Contact_requestController;
 use \App\Http\Controllers\AuthController;
 use \App\Http\Controllers\CommentController;
 use \App\Http\Controllers\ConversationController;
+use \App\Http\Controllers\RatingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,6 +73,12 @@ Route::get('/user/clients/list', [UserController::class, 'get_clients']);
 // Upload image
 Route::post('/upload/image', [UserController::class, 'upload_image']);
 
+// Filter professionals list
+Route::post('/user/professionals/filter', [UserController::class, 'filter_professionals']);
+
+// Rating
+Route::post('/user/rate', [RatingController::class, 'rate_user']);
+
 // Service
 Route::get('/service/list', [ServiceController::class, 'get_list']);
 Route::get('/service/search/{id}', [ServiceController::class, 'search']);
@@ -101,12 +108,8 @@ Route::patch('/experience/update', [ExperienceController::class, 'update_experie
 Route::delete('/experience/delete', [ExperienceController::class, 'delete_experience']);
 
 // Evaluation
-Route::get('/evaluation/list', [EvaluationController::class, 'get_list']);
-Route::get('/evaluation/search/{id}', [EvaluationController::class, 'search']);
-
-Route::post('/evaluation/add', [EvaluationController::class, 'add_evaluation']);
-Route::patch('/evaluation/update', [EvaluationController::class, 'update_evaluation']);
-Route::delete('/evaluation/delete', [EvaluationController::class, 'delete_evaluation']);
+Route::post('/evaluation/update', [EvaluationController::class, 'update']);
+Route::post('/evaluation/get', [EvaluationController::class, 'get']);
 
 // Contact request
 Route::get('/contact_request/list', [Contact_requestController::class, 'get_list']);

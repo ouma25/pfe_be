@@ -7,62 +7,54 @@ use App\Models\Evaluation;
 
 class EvaluationController extends Controller
 {
-    public function add_evaluation(Request $request)
+    public function update(Request $request)
     {
         $request->validate([
-            'stars_number' => ['numeric', 'required'],
-            'comment' => ['string', 'required'],
-            'flags_number' => ['numeric', 'required']
+            'user' => ['required', 'numeric'],
+            'professional' => ['required', 'numeric'],
+            'stars_number' => ['required', 'numeric']
         ]);
 
-        $evaluation = new Evaluation();
-        $evaluation->stars_number = $request->stars_number;
-        $evaluation->comment = $request->comment;
-        $evaluation->flags_number = $request->flags_number;
-
-        return $evaluation->save();
+        $evaluation = Evaluation::all()->where('user', '=', $request->user)
+                                        ->where('professional', '=', $request->professional)
+                                        ->first();
+        if($evaluation)
+        {
+            $evaluation->stars_number = $request->stars_number;
+            return $evaluation->save();
+        }
+        else
+        {
+            return Evaluation::create([
+                'user' => $request->user,
+                'professional' => $request->professional,
+                'stars_number' => $request->stars_number
+            ]);
+        }
     }
 
-    public function update_evaluation(Request $request)
+    public function get(Request $request)
     {
         $request->validate([
-            'id' => ['numeric', 'required'],
-            'stars_number' => ['numeric', 'required'],
-            'comment' => ['string', 'required'],
-            'flags_number' => ['numeric', 'required']
+            'professional' => ['numeric', 'required']
         ]);
 
-        $evaluation = Evaluation::find($request->id);
-        $evaluation->stars_number = $request->stars_number;
-        $evaluation->comment = $request->comment;
-        $evaluation->flags_number = $request->flags_number;
+        $stars = 1;
 
-        return $evaluation->save();
-    }
+        $evaluations = Evaluation::all()->where('professional', '=', $request->professional);
 
-    public function delete_evaluation(Request $request)
-    {
-        $request->validate([
-            'id' => ['numeric', 'required']
-        ]);
+        foreach($evaluations as $eval)
+        {
+            $stars += $eval->stars_number;
+        }
 
-        $evaluation = Evaluation::find($request->id);
-        $evaluation->deleted = 1;
-        $evaluation->deleted_at = date('Y-m-d h:m:s');
-        return $evaluation->save();
-    }
-
-    public function get_list()
-    {
-        return Evaluation::all()->where('delete', '=', 0);
-    }
-
-    public function search(Request $request)
-    {
-        $request->validate([
-            'id' => ['numeric', 'required']
-        ]);
-
-        return Evaluation::find($request->id);
+        if(sizeof($evaluations) > 0)
+        {
+            return $stars / sizeof($evaluations);
+        }
+        else
+        {
+            return 1;
+        }
     }
 }

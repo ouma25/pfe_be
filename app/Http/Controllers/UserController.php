@@ -151,7 +151,7 @@ class UserController extends Controller
 
     public function upload_image(Request $request)
     {
-        $file_name = date('Y-m-d-h-m-s').".".$request->image->extension();
+        $file_name = md5("image123" . rand(1, 9999)) . ".".$request->image->extension();
 
         $request->image->storeAs('public/images', $file_name);
 
@@ -190,5 +190,25 @@ class UserController extends Controller
         ]);
 
         return User::all()->where('email', '=', $request->email)->first();
+    }
+
+    public function filter_professionals(Request $request)
+    {
+        if(isset($request->city) && $request->city != "")
+        {
+            return User::all()->where('type', '=', 'professional')
+                                ->where('deleted', '=', 0)
+                                ->where('city', '=', $request->city);
+        }
+        else if(isset($request->service) && $request->service != -1)
+        {
+            return User::all()->where('type', '=', 'professional')
+                ->where('deleted', '=', 0)
+                ->where('service', '=', $request->service);
+        }
+        else
+        {
+            return User::all()->where('deleted', '=', 0);
+        }
     }
 }

@@ -9,6 +9,8 @@ class Evaluation extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function Evaluation()
     {
         return $this->belongsTo(User::class);
